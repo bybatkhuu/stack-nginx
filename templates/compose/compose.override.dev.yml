@@ -5,9 +5,9 @@ services:
       # - "./volumes/storage/certbot/secrets:/root/.secrets/certbot"
       # - "./volumes/storage/certbot/secrets:/root/.aws"
       # - "./volumes/storage/certbot/logs:/var/log/letsencrypt"
-      - "./volumes/src/sidecar.certbot/scripts/docker/certbot-permissions.sh:/usr/local/bin/certbot-permissions.sh"
-      - "./volumes/src/sidecar.certbot/scripts/docker/certbot-deploy-hook.sh:/usr/local/bin/certbot-deploy-hook.sh"
-      - "./volumes/src/sidecar.certbot/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
+      - "./volumes/src/sidecar-certbot/scripts/docker/certbot-permissions.sh:/usr/local/bin/certbot-permissions.sh"
+      - "./volumes/src/sidecar-certbot/scripts/docker/certbot-deploy-hook.sh:/usr/local/bin/certbot-deploy-hook.sh"
+      - "./volumes/src/sidecar-certbot/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
       - "./volumes/.vscode-server:/root/.vscode-server"
     # deploy:
     #   replicas: 0
@@ -33,9 +33,9 @@ services:
     image: bybatkhuu/nginx:latest
     volumes:
       # - "./volumes/storage/nginx/configs/nginx.conf:/etc/nginx/nginx.conf"
-      - "./volumes/src/server.nginx-template/src/configs/nginx.conf:/etc/nginx/nginx.conf"
-      - "./volumes/src/server.nginx-template/scripts/docker/nginx-reload.sh:/usr/local/bin/nginx-reload.sh"
-      - "./volumes/src/server.nginx-template/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
+      - "./volumes/src/server-nginx-template/src/configs/nginx.conf:/etc/nginx/nginx.conf"
+      - "./volumes/src/server-nginx-template/scripts/docker/nginx-reload.sh:/usr/local/bin/nginx-reload.sh"
+      - "./volumes/src/server-nginx-template/scripts/docker/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh"
       - "./volumes/.vscode-server:/root/.vscode-server"
     # deploy:
     #   replicas: 0

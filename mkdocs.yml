@@ -1,8 +1,8 @@
 site_name: NGINX Stack
 site_description: "This is a docker-compose stack for NGINX with Certbot (Let's Encrypt)."
 site_url: https://stack-nginx-docs.bybatkhuu.dev
-repo_name: bybatkhuu/stack.nginx
-repo_url: https://github.com/bybatkhuu/stack.nginx
+repo_name: bybatkhuu/stack-nginx
+repo_url: https://github.com/bybatkhuu/stack-nginx
 theme:
   name: material
   # name: readthedocs

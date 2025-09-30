@@ -1,8 +1,8 @@
 # NGINX Stack
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/stack.nginx/2.create-release.yml?logo=GitHub)](https://github.com/bybatkhuu/stack.nginx/actions/workflows/2.create-release.yml)
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/stack.nginx?logo=GitHub)](https://github.com/bybatkhuu/stack.nginx/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/bybatkhuu/stack-nginx/2.create-release.yml?logo=GitHub)](https://github.com/bybatkhuu/stack-nginx/actions/workflows/2.create-release.yml)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/bybatkhuu/stack-nginx?logo=GitHub)](https://github.com/bybatkhuu/stack-nginx/releases)
 
 This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 
@@ -89,15 +89,15 @@ cd ~/workspaces/projects
 **OPTION A.** Clone the repository:
 
 ```sh
-git clone https://github.com/bybatkhuu/stack.nginx.git && \
-    cd stack.nginx
+git clone https://github.com/bybatkhuu/stack-nginx.git && \
+    cd stack-nginx
 ```
 
 **OPTION B.** Clone with all submodules:
 
 ```sh
-git clone --recursive https://github.com/bybatkhuu/stack.nginx.git && \
-    cd stack.nginx && \
+git clone --recursive https://github.com/bybatkhuu/stack-nginx.git && \
+    cd stack-nginx && \
     git submodule update --init --recursive && \
     git submodule foreach --recursive git checkout main
 ```
@@ -105,13 +105,13 @@ git clone --recursive https://github.com/bybatkhuu/stack.nginx.git && \
 **OPTION C.** Clone with all submodules (for **DEVELOPMENT**: git + ssh key):
 
 ```sh
-git clone --recursive git@github.com:bybatkhuu/stack.nginx.git && \
-    cd stack.nginx && \
+git clone --recursive git@github.com:bybatkhuu/stack-nginx.git && \
+    cd stack-nginx && \
     git submodule update --init --recursive && \
     git submodule foreach --recursive git checkout main
 ```
 
-**OPTION D.** Download source code from [releases](https://github.com/bybatkhuu/stack.nginx/releases) page.
+**OPTION D.** Download source code from [releases](https://github.com/bybatkhuu/stack-nginx/releases) page.
 
 ### 3. 🛠 Configure the environment
 
@@ -193,7 +193,7 @@ nano ./volumes/storage/nginx/configs/site-enabled/100.example.com.conf
 **[CAUTION]**:
 
 - If ports are conflicting, you should change ports from [**3. step**](#3--configure-the-environment).
-- If container names are conflicting, you should change project directory name (from **`stack.nginx`** to something else, e.g: `prod.stack.nginx`) from [**2.2. step**](#2--download-or-clone-the-repository).
+- If container names are conflicting, you should change project directory name (from **`stack-nginx`** to something else, e.g: `prod.stack-nginx`) from [**2.2. step**](#2--download-or-clone-the-repository).
 
 ```sh
 ./compose.sh start -l

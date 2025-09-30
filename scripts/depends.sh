@@ -51,12 +51,12 @@ REGISTRY_NAME="${REGISTRY_NAME:-${REPO_OWNER}}"
 SUBMODULE_LIST="
 [
 	{
-		\"submodule_repo\": \"${REPO_OWNER}/sidecar.certbot\",
+		\"submodule_repo\": \"${REPO_OWNER}/sidecar-certbot\",
 		\"image_name\": \"${REGISTRY_NAME}/certbot\",
 		\"service_name\": \"certbot\"
 	},
 	{
-		\"submodule_repo\": \"${REPO_OWNER}/server.nginx-template\",
+		\"submodule_repo\": \"${REPO_OWNER}/server-nginx-template\",
 		\"image_name\": \"${REGISTRY_NAME}/nginx\",
 		\"service_name\": \"nginx\"
 	}

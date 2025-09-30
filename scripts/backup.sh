@@ -19,7 +19,7 @@ fi
 
 ## --- Variables --- ##
 # Load from envrionment variables:
-PROJECT_SLUG="${PROJECT_SLUG:-stack.nginx}"
+PROJECT_SLUG="${PROJECT_SLUG:-stack-nginx}"
 BACKUPS_DIR="${BACKUPS_DIR:-./volumes/backups}"
 ## --- Variables --- ##
 

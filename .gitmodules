@@ -1,6 +1,6 @@
 [submodule "volumes/src/sidecar.certbot"]
-	path = volumes/src/sidecar.certbot
+	path = volumes/src/sidecar-certbot
 	url = ../sidecar.certbot.git
 [submodule "volumes/src/server.nginx-template"]
-	path = volumes/src/server.nginx-template
+	path = volumes/src/server-nginx-template
 	url = ../server.nginx-template.git
