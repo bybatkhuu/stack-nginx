@@ -145,7 +145,7 @@ main()
 	if [ "${_IS_COMMIT}" == true ]; then
 		echo "[INFO]: Committing changes..."
 		git add "${COMPOSE_FILE_PATH}" || exit 2
-		git commit -m ":arrow_up::whale: Update docker compose.yml dependency/image versions." || exit 2
+		git commit -m "deps: update docker compose.yml dependency/image versions." || exit 2
 		echo "[OK]: Done."
 
 		if [ "${_IS_PUSH}" == true ]; then

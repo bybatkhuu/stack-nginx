@@ -106,7 +106,7 @@ main()
 		echo "[INFO]: Committing bump version 'v${_new_version}'..."
 		# Commit the updated version file:
 		git add "${VERSION_FILE_PATH}" || exit 2
-		git commit -m ":bookmark: Bump version to '${_new_version}'." || exit 2
+		git commit -m "version: bump version to '${_new_version}'." || exit 2
 		echo "[OK]: Done."
 
 		if [ "${_IS_TAG}" == true ]; then

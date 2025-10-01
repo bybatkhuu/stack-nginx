@@ -99,7 +99,7 @@ main()
 		echo "[INFO]: Committing changelog version '${_release_tag}'..."
 		git add "${CHANGELOG_FILE_PATH}" || exit 2
 		git add "${RELEASE_NOTES_FILE_PATH}" || exit 2
-		git commit -m ":memo: Update changelog version '${_release_tag}'." || exit 2
+		git commit -m "docs: update changelog version '${_release_tag}'." || exit 2
 		echo "[OK]: Done."
 
 		if [ "${_IS_PUSH}" == true ]; then
