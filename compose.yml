@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.0.3-250901
+    image: bybatkhuu/certbot:3.0.4-251008
     restart: unless-stopped
     environment:
       - TERM=${TERM:-xterm}
@@ -18,7 +18,7 @@ services:
     tty: true
 
   nginx:
-    image: bybatkhuu/nginx:3.1.0-250903
+    image: bybatkhuu/nginx:3.1.1-251008
     depends_on:
       - certbot
     restart: unless-stopped
