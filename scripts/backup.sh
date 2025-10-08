@@ -32,9 +32,11 @@ main()
 	fi
 
 	echo "[INFO]: Checking current version..."
+	local _current_version
 	_current_version="$(./scripts/get-version.sh)"
 	echo "[OK]: Current version: '${_current_version}'"
 
+	local _backup_file_path
 	_backup_file_path="${BACKUPS_DIR}/${PROJECT_SLUG}.v${_current_version}.$(date -u '+%y%m%d_%H%M%S').tar.gz"
 	echo "[INFO]: Creating backup file: '${_backup_file_path}'..."
 	tar -czpvf "${_backup_file_path}" -C ./volumes ./storage || {

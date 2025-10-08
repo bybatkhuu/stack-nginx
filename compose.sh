@@ -39,31 +39,31 @@ _DEFAULT_SERVICE="nginx"
 
 
 ## --- Functions --- ##
-_doBuild()
+_build()
 {
 	# shellcheck disable=SC2068
 	docker compose build ${@:-} || exit 2
 }
 
-_doValidate()
+_validate()
 {
 	docker compose config || exit 2
 }
 
-_doStart()
+_start()
 {
 	if [ "${1:-}" == "-l" ]; then
 		shift
 		# shellcheck disable=SC2068
 		docker compose up -d --remove-orphans --force-recreate ${@:-} || exit 2
-		_doLogs "${@:-}"
+		_logs "${@:-}"
 	else
 		# shellcheck disable=SC2068
 		docker compose up -d --remove-orphans --force-recreate ${@:-} || exit 2
 	fi
 }
 
-_doStop()
+_stop()
 {
 	if [ -z "${1:-}" ]; then
 		docker compose down --remove-orphans || exit 2
@@ -73,43 +73,43 @@ _doStop()
 	fi
 }
 
-_doRestart()
+_restart()
 {
 	if [ "${1:-}" == "-l" ]; then
 		shift
-		_doStop "${@:-}" || exit 2
-		_doStart -l "${@:-}" || exit 2
+		_stop "${@:-}" || exit 2
+		_start -l "${@:-}" || exit 2
 	else
-		_doStop "${@:-}" || exit 2
-		_doStart "${@:-}" || exit 2
+		_stop "${@:-}" || exit 2
+		_start "${@:-}" || exit 2
 	fi
 	# docker compose restart ${@:-} || exit 2
 }
 
-_doLogs()
+_logs()
 {
 	# shellcheck disable=SC2068
 	docker compose logs -f --tail 100 ${@} || exit 2
 }
 
-_doList()
+_list()
 {
 	docker compose ps || exit 2
 }
 
-_doPs()
+_ps()
 {
 	# shellcheck disable=SC2068
 	docker compose top ${@:-} || exit 2
 }
 
-_doStats()
+_stats()
 {
 	# shellcheck disable=SC2068
 	docker compose stats ${@:-} || exit 2
 }
 
-_doExec()
+_exec()
 {
 	if [ -z "${1:-}" ]; then
 		echo "[ERROR]: No arguments provided for exec command!"
@@ -121,17 +121,17 @@ _doExec()
 	docker compose exec "${_DEFAULT_SERVICE}" ${@} || exit 2
 }
 
-_doCerts()
+_certs()
 {
 	docker compose exec certbot certbot certificates || exit 2
 }
 
-_doReload()
+_reload()
 {
 	docker compose exec "${_DEFAULT_SERVICE}" /bin/bash -c "nginx -t && nginx -s reload" || exit 2
 }
 
-_doEnter()
+_enter()
 {
 	local _service="${_DEFAULT_SERVICE}"
 	if [ -n "${1:-}" ]; then
@@ -142,22 +142,22 @@ _doEnter()
 	docker compose exec "${_service}" /bin/bash || exit 2
 }
 
-_doImages()
+_images()
 {
 	# shellcheck disable=SC2068
 	docker compose images ${@:-} || exit 2
 }
 
-_doClean()
+_clean()
 {
 	# shellcheck disable=SC2068
 	docker compose down -v --remove-orphans ${@:-} || exit 2
 }
 
-_doUpdate()
+_update()
 {
 	if docker compose ps | grep 'Up' > /dev/null 2>&1; then
-		_doStop "${@:-}" || exit 2
+		_stop "${@:-}" || exit 2
 	fi
 
 	# shellcheck disable=SC2068
@@ -165,13 +165,13 @@ _doUpdate()
 	# shellcheck disable=SC2046
 	docker rmi -f $(docker images --filter "dangling=true" -q --no-trunc) > /dev/null 2>&1 || true
 
-	# _doStart "${@:-}" || exit 2
+	# _start "${@:-}" || exit 2
 }
 ## --- Functions --- ##
 
 
 ## --- Menu arguments --- ##
-_exitOnWrongParams()
+_error_params()
 {
 	echo "[INFO]: USAGE: ${0}  build | validate | start | stop | restart | logs | list | ps | stats | exec | certs | reload | enter | images | clean | update"
 	exit 1
@@ -181,60 +181,60 @@ main()
 {
 	if [ -z "${1:-}" ]; then
 		echo "[ERROR]: Not found any input!"
-		_exitOnWrongParams
+		_error_params
 	fi
 
 	case ${1} in
 		build)
 			shift
-			_doBuild "${@:-}";;
+			_build "${@:-}";;
 		validate | valid | config)
 			shift
-			_doValidate;;
+			_validate;;
 		start | run | up)
 			shift
-			_doStart "${@:-}";;
+			_start "${@:-}";;
 		stop | down | remove | rm | delete | del)
 			shift
-			_doStop "${@:-}";;
+			_stop "${@:-}";;
 		restart)
 			shift
-			_doRestart "${@:-}";;
+			_restart "${@:-}";;
 		logs)
 			shift
-			_doLogs "${@:-}";;
+			_logs "${@:-}";;
 		list | ls)
-			_doList;;
+			_list;;
 		ps | top)
 			shift
-			_doPs "${@:-}";;
+			_ps "${@:-}";;
 		stats | resource | limit)
 			shift
-			_doStats "${@:-}";;
+			_stats "${@:-}";;
 		exec)
 			shift
-			_doExec "${@:-}";;
+			_exec "${@:-}";;
 		certs | certificates)
 			shift
-			_doCerts;;
+			_certs;;
 		reload)
 			shift
-			_doReload;;
+			_reload;;
 		enter)
 			shift
-			_doEnter "${@:-}";;
+			_enter "${@:-}";;
 		images | image)
 			shift
-			_doImages "${@:-}";;
+			_images "${@:-}";;
 		clean | clear)
 			shift
-			_doClean "${@:-}";;
+			_clean "${@:-}";;
 		update | pull)
 			shift
-			_doUpdate "${@:-}";;
+			_update "${@:-}";;
 		*)
 			echo "[ERROR]: Failed to parse input: ${*}!"
-			_exitOnWrongParams;;
+			_error_params;;
 	esac
 
 	exit

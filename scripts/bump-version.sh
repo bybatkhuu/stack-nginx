@@ -36,6 +36,7 @@ main()
 {
 	## --- Menu arguments --- ##
 	if [ -n "${1:-}" ]; then
+		local _input
 		for _input in "${@:-}"; do
 			case ${_input} in
 				-b=* | --bump-type=*)
@@ -79,15 +80,17 @@ main()
 
 
 	echo "[INFO]: Checking current version..."
+	local _current_version
 	_current_version="$(./scripts/get-version.sh)"
 	echo "[OK]: Current version: '${_current_version}'"
 
 	# Split the version string into its components:
+	local _major _minor _patch
 	_major=$(echo "${_current_version}" | cut -d. -f1)
 	_minor=$(echo "${_current_version}" | cut -d. -f2)
 	_patch=$(echo "${_current_version}" | cut -d. -f3 | cut -d- -f1)
 
-	_new_version=${_current_version}
+	local _new_version=${_current_version}
 	# Determine the new version based on the type of bump:
 	if [ "${_BUMP_TYPE}" == "major" ]; then
 		_new_version="$((_major + 1)).0.0-$(date -u '+%y%m%d')"

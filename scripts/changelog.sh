@@ -44,6 +44,7 @@ main()
 {
 	## --- Menu arguments --- ##
 	if [ -n "${1:-}" ]; then
+		local _input
 		for _input in "${@:-}"; do
 			case ${_input} in
 				-c | --commit)
@@ -70,7 +71,8 @@ main()
 	fi
 
 
-	_changelog_title="# Changelog"
+	local _changelog_title="# Changelog"
+	local _release_tag _release_notes _release_entry
 	_release_tag=$(gh release view --json tagName -q ".tagName")
 	_release_notes=$(gh release view --json body -q ".body")
 	_release_entry="## ${_release_tag} ($(date '+%Y-%m-%d'))\n\n${_release_notes}"
@@ -80,17 +82,19 @@ main()
 		echo -e "${_changelog_title}\n\n" > "${CHANGELOG_FILE_PATH}"
 	fi
 
+	local _tail_changelog
 	_tail_changelog=$(tail -n +3 "${CHANGELOG_FILE_PATH}")
 	echo -e "${_changelog_title}\n\n${_release_entry}\n\n${_tail_changelog}" > "${CHANGELOG_FILE_PATH}"
 	echo "[OK]: Updated changelog version: '${_release_tag}'"
 
 
 	echo "[INFO]: Updating release notes..."
-	_release_notes_header="---\ntitle: Release Notes\nhide:\n  - navigation\n---\n\n# 📌 Release Notes"
+	local _release_notes_header="---\ntitle: Release Notes\nhide:\n  - navigation\n---\n\n# 📌 Release Notes"
 	if ! grep -q "^# 📌 Release Notes" "${RELEASE_NOTES_FILE_PATH}"; then
 		echo -e "${_release_notes_header}\n\n" > "${RELEASE_NOTES_FILE_PATH}"
 	fi
 
+	local _tail_notes
 	_tail_notes=$(tail -n +9 "${RELEASE_NOTES_FILE_PATH}")
 	echo -e "${_release_notes_header}\n\n${_release_entry}\n\n${_tail_notes}" > "${RELEASE_NOTES_FILE_PATH}"
 	echo "[OK]: Updated release notes with version: '${_release_tag}'"

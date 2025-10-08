@@ -75,6 +75,7 @@ main()
 {
 	## --- Menu arguments --- ##
 	if [ -n "${1:-}" ]; then
+		local _input
 		for _input in "${@:-}"; do
 			case ${_input} in
 				-b | --branch)
@@ -99,20 +100,23 @@ main()
 	## --- Menu arguments --- ##
 
 	echo "[INFO]: Checking and syncing for new versions of dependencies/submodules..."
-	_HAS_NEW_VERSIONS=false
+	local _has_new_versions=false
 	while read -r _submodule; do
+		local _submodule_repo _image_name _service_name
 		_submodule_repo=$(echo "${_submodule}" | jq -r '.submodule_repo')
 		_image_name=$(echo "${_submodule}" | jq -r '.image_name')
 		_service_name=$(echo "${_submodule}" | jq -r '.service_name')
 
+		local _submodule_version
 		_submodule_version="$(gh release view --json tagName --repo "${_submodule_repo}" | jq -r ".tagName" | tr -d 'v')" || exit 2
 		if [ -z "${_submodule_version}" ] || [ "${_submodule_version}" == "null" ]; then
 			echo "[ERROR]: Not found any release version from submodule: '${_submodule_repo}'!"
 			exit 1
 		fi
 
-		_HAS_NEW_VERSION=false
-		_latest_image="${_image_name}:${_submodule_version}"
+		local _has_new_version=false
+		local _latest_image="${_image_name}:${_submodule_version}"
+		local _current_image
 		_current_image=$(yq ".services.${_service_name}.image" "${COMPOSE_FILE_PATH}")
 
 		if [ "${_current_image}" == "${_latest_image}" ]; then
@@ -120,25 +124,25 @@ main()
 			continue
 		else
 			echo "[INFO]: Found new version for service '${_service_name}': '${_latest_image}'."
-			_HAS_NEW_VERSION=true
-			_HAS_NEW_VERSIONS=true
+			_has_new_version=true
+			_has_new_versions=true
 		fi
 
-		if [ "${_HAS_NEW_VERSION}" == true ]; then
+		if [ "${_has_new_version}" == true ]; then
 			echo "[INFO]: Syncing '${_service_name}' service image version to: '${_latest_image}'..."
 			yq -i ".services.${_service_name}.image = \"${_latest_image}\"" "${COMPOSE_FILE_PATH}"
 			echo "[OK]: Done."
 		fi
 	done < <(echo "${SUBMODULE_LIST}" | jq -c '.[]')
 
-	if [ "${_HAS_NEW_VERSIONS}" == false ]; then
+	if [ "${_has_new_versions}" == false ]; then
 		echo "[OK]: No new versions found, nothing to update."
 		exit 0
 	fi
 
+	local _new_branch_name
 	if [ "${_CREATE_BRANCH}" == true ]; then
-		_current_dt="$(date -u '+%y%m%d-%H%M%S')"
-		_new_branch_name="deps/update-${_current_dt}"
+		_new_branch_name="deps/update-$(date -u '+%y%m%d-%H%M%S')"
 		git checkout -b "${_new_branch_name}" || exit 2
 	fi
 

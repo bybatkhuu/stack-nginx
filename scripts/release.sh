@@ -29,9 +29,10 @@ fi
 ## --- Main --- ##
 main()
 {
-	_cur_version="$(./scripts/get-version.sh)"
-	echo "[INFO]: Creating release for version: 'v${_cur_version}'..."
-	gh release create "v${_cur_version}" --generate-notes
+	local _current_version
+	_current_version="$(./scripts/get-version.sh)"
+	echo "[INFO]: Creating release for version: 'v${_current_version}'..."
+	gh release create "v${_current_version}" --generate-notes
 	echo "[OK]: Done."
 }
 

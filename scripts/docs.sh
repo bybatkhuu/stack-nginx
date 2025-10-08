@@ -34,6 +34,7 @@ main()
 {
 	## --- Menu arguments --- ##
 	if [ -n "${1:-}" ]; then
+		local _input
 		for _input in "${@:-}"; do
 			case ${_input} in
 				-b | --build)
@@ -62,6 +63,7 @@ main()
 		fi
 	fi
 
+	local _major_minor_version
 	if [ "${_IS_BUILD}" == true ]; then
 		echo "[INFO]: Building documentation pages (HTML) into the 'site' directory..."
 		mkdocs build

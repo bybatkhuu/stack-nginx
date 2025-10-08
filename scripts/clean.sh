@@ -32,6 +32,7 @@ main()
 {
 	## --- Menu arguments --- ##
 	if [ -n "${1:-}" ]; then
+		local _input
 		for _input in "${@:-}"; do
 			case ${_input} in
 				-l | --logs)
@@ -66,7 +67,7 @@ main()
 
 	rm -rfv ./tmp || exit 2
 
-	_is_docker_running=false
+	local _is_docker_running=false
 	if [ -n "$(which docker)" ] && docker info > /dev/null 2>&1; then
 		_is_docker_running=true
 	fi
@@ -90,6 +91,7 @@ main()
 		echo "[OK]: Removed logs."
 	fi
 
+	local _confirm_input
 	if [ "${_IS_DATA}" == true ] || [ "${_IS_ALL}" == true ]; then
 		_confirm_input="n"
 		if [ "${_IS_FORCE}" == true ]; then
@@ -110,7 +112,7 @@ main()
 		fi
 	fi
 
-	if [ "${_IS_BACKUPS}" == true ] || [ "${_IS_ALL}" == true ]; then
+	if [ "${_IS_BACKUPS}" == true ]; then
 		_confirm_input="n"
 		if [ "${_IS_FORCE}" == true ]; then
 			_confirm_input="y"
