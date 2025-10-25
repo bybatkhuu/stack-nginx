@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.2.0-251025 (2025-10-25)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.2.0-251025 -->
+
+## What's Changed
+### ✨ Features
+* Update docker compose.yml dependency/image versions by @github-actions[bot] in https://github.com/bybatkhuu/stack-nginx/pull/38
+* feat: add UID and GID by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/39
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.1.1-251008...v4.2.0-251025
+
 ## v4.1.1-251008 (2025-10-08)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.1.1-251008 -->
