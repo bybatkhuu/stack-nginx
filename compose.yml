@@ -16,6 +16,7 @@ services:
       - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
     network_mode: host
     tty: true
+
   nginx:
     image: bybatkhuu/nginx:3.2.0-251025
     depends_on:
@@ -34,5 +35,5 @@ services:
       - "./volumes/storage/nginx/configs/sites-enabled:/etc/nginx/sites-enabled"
       - "./volumes/storage/nginx/configs/templates:/etc/nginx/templates"
     network_mode: host
-    tty: true
     command: ["--https=lets"]
+    tty: true
