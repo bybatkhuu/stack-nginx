@@ -3,11 +3,11 @@ services:
     image: bybatkhuu/certbot:3.1.1-251025
     restart: unless-stopped
     environment:
-      - TERM=${TERM:-xterm}
-      - TZ=${TZ:-Asia/Seoul}
-      - CERTBOT_EMAIL=${CERTBOT_EMAIL}
-      - CERTBOT_DOMAINS=${CERTBOT_DOMAINS}
-      - CERTBOT_DNS_TIMEOUT=${CERTBOT_DNS_TIMEOUT:-30}
+      TERM: ${TERM:-xterm}
+      TZ: ${TZ:-Asia/Seoul}
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
+      CERTBOT_DOMAINS: ${CERTBOT_DOMAINS}
+      CERTBOT_DNS_TIMEOUT: ${CERTBOT_DNS_TIMEOUT:-30}
     env_file:
       - path: .env
         required: false
@@ -16,14 +16,15 @@ services:
       - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
     network_mode: host
     tty: true
+
   nginx:
     image: bybatkhuu/nginx:3.2.1-251025
     depends_on:
       - certbot
     restart: unless-stopped
     environment:
-      - TERM=${TERM:-xterm}
-      - TZ=${TZ:-Asia/Seoul}
+      TERM: ${TERM:-xterm}
+      TZ: ${TZ:-Asia/Seoul}
     env_file:
       - path: .env
         required: false
