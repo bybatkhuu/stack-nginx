@@ -1,5 +1,17 @@
 # Changelog
 
+## v4.2.1-251025 (2025-10-25)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.2.1-251025 -->
+
+## What's Changed
+### 🐛 Fixes
+* Update docker compose.yml dependency/image versions by @github-actions[bot] in https://github.com/bybatkhuu/stack-nginx/pull/40
+* Dev by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/41
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.2.0-251025...v4.2.1-251025
+
 ## v4.2.0-251025 (2025-10-25)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.2.0-251025 -->
