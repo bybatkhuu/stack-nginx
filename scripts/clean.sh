@@ -87,7 +87,8 @@ main()
 
 	if [ "${_IS_LOGS}" == true ] || [ "${_IS_ALL}" == true ]; then
 		echo "[INFO]: Removing logs..."
-		find . -type d -name ".git" -prune -o -type d -name "logs" -exec rm -rfv {} + || exit 2
+		# find . -type d -name ".git" -prune -o -type d -name "logs" -exec rm -rfv {} + || exit 2
+		find ./volumes/storage -type f -name "*.log" -exec rm -v {} + || exit 2
 		echo "[OK]: Removed logs."
 	fi
 
