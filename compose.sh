@@ -1,33 +1,29 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 
 ## --- Base --- ##
-# Getting path of this script file:
-_PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+_PROJECT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-"$0"}")" >/dev/null 2>&1 && pwd -P)"
 cd "${_PROJECT_DIR}" || exit 2
 
 
-# Loading .env file (if exists):
-if [ -f ".env" ]; then
-	# shellcheck disable=SC1091
-	source .env
-fi
+# shellcheck disable=SC1091
+[ -f .env ] && . .env
 
 
 # Checking docker and docker-compose installed:
-if [ -z "$(which docker)" ]; then
-	echo "[ERROR]: 'docker' not found or not installed!"
+if ! command -v docker >/dev/null 2>&1; then
+	echo "[ERROR]: Not found 'docker' command, please install it first!" >&2
 	exit 1
 fi
 
 if ! docker info > /dev/null 2>&1; then
-	echo "[ERROR]: Unable to communicate with the docker daemon. Check docker is running or check your account added to docker group!"
+	echo "[ERROR]: Unable to communicate with the docker daemon. Check docker is running or check your account added to docker group!" >&2
 	exit 1
 fi
 
 if ! docker compose > /dev/null 2>&1; then
-	echo "[ERROR]: 'docker compose' not found or not installed!"
+	echo "[ERROR]: 'docker compose' not found or not installed!" >&2
 	exit 1
 fi
 ## --- Base --- ##
@@ -112,7 +108,7 @@ _stats()
 _exec()
 {
 	if [ -z "${1:-}" ]; then
-		echo "[ERROR]: No arguments provided for exec command!"
+		echo "[ERROR]: Not found any arguments for exec command!" >&2
 		exit 1
 	fi
 
@@ -171,74 +167,112 @@ _update()
 
 
 ## --- Menu arguments --- ##
-_error_params()
-{
-	echo "[INFO]: USAGE: ${0}  build | validate | start | stop | restart | logs | list | ps | stats | exec | certs | reload | enter | images | clean | update"
-	exit 1
+_usage_help() {
+	cat <<EOF
+USAGE: ${0} <command> [args...]
+
+COMMANDS:
+    build
+    validate | valid | config
+    start | run | up
+    stop | down | remove | rm | delete | del
+    restart
+    logs
+    list
+    ps
+    stats | resource | limit
+    exec
+	certs | certificates
+	reload
+    enter
+    images
+    clean | clear
+    update | pull | download
+
+OPTIONS:
+    -h, --help    Show this help message.
+EOF
 }
 
-main()
-{
-	if [ -z "${1:-}" ]; then
-		echo "[ERROR]: Not found any input!"
-		_error_params
-	fi
+if [ $# -eq 0 ]; then
+	echo "[ERROR]: Not found any input!" >&2
+	_usage_help
+	exit 1
+fi
 
-	case ${1} in
+while [ $# -gt 0 ]; do
+	case "${1}" in
 		build)
 			shift
-			_build "${@:-}";;
+			_build "${@:-}"
+			exit 0;;
 		validate | valid | config)
 			shift
-			_validate;;
+			_validate
+			exit 0;;
 		start | run | up)
 			shift
-			_start "${@:-}";;
+			_start "${@:-}"
+			exit 0;;
 		stop | down | remove | rm | delete | del)
 			shift
-			_stop "${@:-}";;
+			_stop "${@:-}"
+			exit 0;;
 		restart)
 			shift
-			_restart "${@:-}";;
+			_restart "${@:-}"
+			exit 0;;
 		logs)
 			shift
-			_logs "${@:-}";;
-		list | ls)
-			_list;;
-		ps | top)
+			_logs "${@:-}"
+			exit 0;;
+		list)
 			shift
-			_ps "${@:-}";;
+			_list
+			exit 0;;
+		ps)
+			shift
+			_ps "${@:-}"
+			exit 0;;
 		stats | resource | limit)
 			shift
-			_stats "${@:-}";;
+			_stats
+			exit 0;;
 		exec)
 			shift
-			_exec "${@:-}";;
+			_exec "${@:-}"
+			exit 0;;
 		certs | certificates)
 			shift
-			_certs;;
+			_certs
+			exit 0;;
 		reload)
 			shift
-			_reload;;
+			_reload
+			exit 0;;
 		enter)
 			shift
-			_enter "${@:-}";;
-		images | image)
+			_enter "${@:-}"
+			exit 0;;
+		images)
 			shift
-			_images "${@:-}";;
+			_images "${@:-}"
+			exit 0;;
 		clean | clear)
 			shift
-			_clean "${@:-}";;
-		update | pull)
+			_clean "${@:-}"
+			exit 0;;
+		update | pull | download)
 			shift
-			_update "${@:-}";;
+			_update "${@:-}"
+			exit 0;;
+		-h | --help)
+			_usage_help
+			exit 0;;
 		*)
-			echo "[ERROR]: Failed to parse input: ${*}!"
-			_error_params;;
+			echo "[ERROR]: Failed to parse argument -> ${1}!" >&2
+			_usage_help
+			exit 1;;
 	esac
-
-	exit
-}
-
-main "${@:-}"
+done
 ## --- Menu arguments --- ##
