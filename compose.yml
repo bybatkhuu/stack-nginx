@@ -1,7 +1,7 @@
 services:
   certbot:
     image: bybatkhuu/certbot:3.1.1-251025
-    restart: unless-stopped
+    restart: always
     environment:
       TERM: ${TERM:-xterm}
       TZ: ${TZ:-Asia/Seoul}
@@ -21,7 +21,7 @@ services:
     image: bybatkhuu/nginx:3.2.1-251025
     depends_on:
       - certbot
-    restart: unless-stopped
+    restart: always
     environment:
       TERM: ${TERM:-xterm}
       TZ: ${TZ:-Asia/Seoul}
