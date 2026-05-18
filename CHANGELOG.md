@@ -1,5 +1,21 @@
 # Changelog
 
+## v4.3.0-260518 (2026-05-18)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.3.0-260518 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* ⬆️ Bump tailscale/github-action from 3 to 4 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/44
+* ⬆️ Bump actions/setup-python from 5 to 6 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/43
+* ⬆️ Bump actions/checkout from 5 to 6 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/42
+### ✨ Features
+* ⬆️ Bump https://github.com/gitleaks/gitleaks from v8.28.0 to 8.30.1 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/45
+* Update certbot/nginx images and bump gitleaks. by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/46
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.2.1-251025...v4.3.0-260518
+
 ## v4.2.1-251025 (2025-10-25)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.2.1-251025 -->
