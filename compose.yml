@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.1.2-260518
+    image: bybatkhuu/certbot:3.1.3-260801
     restart: always
     environment:
       TERM: ${TERM:-xterm}
