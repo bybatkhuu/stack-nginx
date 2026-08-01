@@ -6,6 +6,20 @@ hide:
 
 # 📌 Release Notes
 
+## v4.3.1-260801 (2026-08-01)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.3.1-260801 -->
+
+## What's Changed
+### 💥 Breaking Changes
+* ⬆️ Bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/47
+* ⬆️ Bump actions/setup-python from 6 to 7 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/48
+### 👷 CI/CD
+* Bump actions/checkout and actions/setup-python to version 7 by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/49
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.3.0-260518...v4.3.1-260801
+
 ## v4.3.0-260518 (2026-05-18)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.3.0-260518 -->
