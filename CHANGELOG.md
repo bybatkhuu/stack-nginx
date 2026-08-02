@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.3.2-260802 (2026-08-02)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.3.2-260802 -->
+
+## What's Changed
+### 🧹 Chores
+* Update Nginx image version and adjust volume paths by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/50
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.3.1-260801...v4.3.2-260802
+
 ## v4.3.1-260801 (2026-08-01)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.3.1-260801 -->
