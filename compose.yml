@@ -18,7 +18,7 @@ services:
     tty: true
 
   nginx:
-    image: bybatkhuu/nginx:3.3.0-260518
+    image: bybatkhuu/nginx:3.3.1-260802
     depends_on:
       - certbot
     restart: always
@@ -29,11 +29,11 @@ services:
       - path: .env
         required: false
     volumes:
+      - "./volumes/configs/nginx/templates:/etc/nginx/templates"
+      - "./volumes/configs/nginx/sites-enabled:/etc/nginx/sites-enabled"
       - "./volumes/storage/nginx/logs:/var/log/nginx"
       - "./volumes/storage/nginx/www:/var/www"
       - "./volumes/storage/nginx/ssl:/etc/nginx/ssl"
-      - "./volumes/storage/nginx/configs/sites-enabled:/etc/nginx/sites-enabled"
-      - "./volumes/storage/nginx/configs/templates:/etc/nginx/templates"
     network_mode: host
     command: ["--https=lets"]
     tty: true

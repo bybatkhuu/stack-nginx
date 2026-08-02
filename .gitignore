@@ -521,5 +521,11 @@ docker-compose.override.yaml
 #volumes
 volumes/**
 !volumes/**/
-
 !volumes/**/*.gitkeep
+!volumes/configs/**/
+!volumes/configs/**/*
+volumes/configs/**/*.bak
+volumes/configs/**/*.DS_Store
+volumes/configs/**/*Thumbs.db
+volumes/configs/**/*~
+volumes/configs/**/*._*
