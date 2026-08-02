@@ -4,7 +4,7 @@ services:
     restart: always
     environment:
       TERM: ${TERM:-xterm}
-      TZ: ${TZ:-Asia/Seoul}
+      TZ: ${TZ:-UTC}
       CERTBOT_EMAIL: ${CERTBOT_EMAIL}
       CERTBOT_DOMAINS: ${CERTBOT_DOMAINS}
       CERTBOT_DNS_TIMEOUT: ${CERTBOT_DNS_TIMEOUT:-30}
@@ -24,7 +24,7 @@ services:
     restart: always
     environment:
       TERM: ${TERM:-xterm}
-      TZ: ${TZ:-Asia/Seoul}
+      TZ: ${TZ:-UTC}
     env_file:
       - path: .env
         required: false
