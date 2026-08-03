@@ -269,6 +269,8 @@ You can use the following environment variables to configure:
 [**`.env.example`**](./.env.example):
 
 ```sh
+# TZ=UTC
+
 ## --- CERTBOT configs --- ##
 CERTBOT_EMAIL=user@email.com
 CERTBOT_DOMAINS="example.com,www.example.com"
