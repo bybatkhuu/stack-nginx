@@ -1,35 +1,31 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 
 ## --- Base --- ##
-# Getting path of this script file:
-_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+_SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-"$0"}")" >/dev/null 2>&1 && pwd -P)"
 _PROJECT_DIR="$(cd "${_SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
 
 
-# Loading .env file (if exists):
-if [ -f ".env" ]; then
-	# shellcheck disable=SC1091
-	source .env
-fi
+# shellcheck disable=SC1091
+[ -f .env ] && . .env
 
 
-if [ -z "$(which gh)" ]; then
-	echo "[ERROR]: 'gh' not found or not installed!"
+if ! command -v gh >/dev/null 2>&1; then
+	echo "[ERROR]: Not found 'gh' command, please install it first!" >&2
 	exit 1
 fi
 
 if ! gh auth status >/dev/null 2>&1; then
-    echo "[ERROR]: You need to login: 'gh auth login'!"
+    echo "[ERROR]: You need to login: 'gh auth login'!" >&2
     exit 1
 fi
 ## --- Base --- ##
 
 
 ## --- Variables --- ##
-# Load from envrionment variables:
+# Load from environment variables:
 CHANGELOG_FILE_PATH="${CHANGELOG_FILE_PATH:-./CHANGELOG.md}"
 RELEASE_NOTES_FILE_PATH="${RELEASE_NOTES_FILE_PATH:-./docs/release-notes.md}"
 
@@ -39,38 +35,53 @@ _IS_PUSH=false
 ## --- Variables --- ##
 
 
+## --- Menu arguments --- ##
+_usage_help() {
+	cat <<EOF
+USAGE: ${0} [options]
+
+OPTIONS:
+    -c, --commit    Enable commit step. Default: false
+    -p, --push      Enable push step. Default: false
+    -h, --help      Show this help message.
+
+EXAMPLES:
+    ${0} -c -p
+    ${0} --commit
+EOF
+}
+
+while [ $# -gt 0 ]; do
+	case "${1}" in
+		-c | --commit)
+			_IS_COMMIT=true
+			shift;;
+		-p | --push)
+			_IS_PUSH=true
+			shift;;
+		-h | --help)
+			_usage_help
+			exit 0;;
+		*)
+			echo "[ERROR]: Failed to parse argument -> ${1}!" >&2
+			_usage_help
+			exit 1;;
+	esac
+done
+## --- Menu arguments --- ##
+
+
+if [ "${_IS_COMMIT}" == true ]; then
+	if ! command -v git >/dev/null 2>&1; then
+		echo "[ERROR]: Not found 'git' command, please install it first!" >&2
+		exit 1
+	fi
+fi
+
+
 ## --- Main --- ##
 main()
 {
-	## --- Menu arguments --- ##
-	if [ -n "${1:-}" ]; then
-		local _input
-		for _input in "${@:-}"; do
-			case ${_input} in
-				-c | --commit)
-					_IS_COMMIT=true
-					shift;;
-				-p | --push)
-					_IS_PUSH=true
-					shift;;
-				*)
-					echo "[ERROR]: Failed to parse input -> ${_input}!"
-					echo "[INFO]: USAGE: ${0}  -c, --commit | -p, --push"
-					exit 1;;
-			esac
-		done
-	fi
-	## --- Menu arguments --- ##
-
-
-	if [ "${_IS_COMMIT}" == true ]; then
-		if [ -z "$(which git)" ]; then
-			echo "[ERROR]: 'git' not found or not installed!"
-			exit 1
-		fi
-	fi
-
-
 	local _changelog_title="# Changelog"
 	local _release_tag _release_notes _release_entry
 	_release_tag=$(gh release view --json tagName -q ".tagName")
@@ -89,7 +100,7 @@ main()
 
 
 	echo "[INFO]: Updating release notes..."
-	local _release_notes_header="---\ntitle: Release Notes\nhide:\n  - navigation\n---\n\n# 📌 Release Notes"
+	local _release_notes_header="---\ntitle: \"Release Notes\"\nhide:\n  - navigation\n---\n\n# 📌 Release Notes"
 	if ! grep -q "^# 📌 Release Notes" "${RELEASE_NOTES_FILE_PATH}"; then
 		echo -e "${_release_notes_header}\n\n" > "${RELEASE_NOTES_FILE_PATH}"
 	fi
@@ -114,5 +125,5 @@ main()
 	fi
 }
 
-main "${@:-}"
+main
 ## --- Main --- ##

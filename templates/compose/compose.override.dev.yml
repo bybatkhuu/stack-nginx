@@ -2,8 +2,7 @@ services:
   certbot:
     image: bybatkhuu/certbot:latest
     volumes:
-      # - "./volumes/secrets/certbot:/root/.secrets/certbot"
-      # - "./volumes/secrets/certbot:/root/.aws"
+      # - "./volumes/secrets/certbot/credentials/.aws:/root/.aws"
       # - "./volumes/storage/certbot/logs:/var/log/letsencrypt"
       - "./volumes/src/sidecar-certbot/scripts/docker/certbot-permissions.sh:/usr/local/bin/certbot-permissions.sh"
       - "./volumes/src/sidecar-certbot/scripts/docker/certbot-deploy-hook.sh:/usr/local/bin/certbot-deploy-hook.sh"

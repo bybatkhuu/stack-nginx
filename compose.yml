@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.1.3-260801
+    image: bybatkhuu/certbot:3.1.4-260804
     restart: always
     environment:
       TERM: ${TERM:-xterm}
@@ -12,13 +12,14 @@ services:
       - path: .env
         required: false
     volumes:
+      - "./volumes/secrets/certbot/credentials:/root/.secrets/certbot"
+      - "./volumes/secrets/certbot/ssl:/etc/letsencrypt"
       - "./volumes/storage/nginx/www/.well-known/acme-challenge:/var/www/.well-known/acme-challenge"
-      - "./volumes/storage/nginx/ssl:/etc/letsencrypt"
     network_mode: host
     tty: true
 
   nginx:
-    image: bybatkhuu/nginx:3.3.1-260802
+    image: bybatkhuu/nginx:3.3.2-260804
     depends_on:
       - certbot
     restart: always
@@ -29,11 +30,11 @@ services:
       - path: .env
         required: false
     volumes:
+      - "./volumes/secrets/certbot/ssl:/etc/nginx/ssl"
       - "./volumes/configs/nginx/templates:/etc/nginx/templates"
       - "./volumes/configs/nginx/sites-enabled:/etc/nginx/sites-enabled"
       - "./volumes/storage/nginx/logs:/var/log/nginx"
       - "./volumes/storage/nginx/www:/var/www"
-      - "./volumes/storage/nginx/ssl:/etc/nginx/ssl"
     network_mode: host
     command: ["--https=lets"]
     tty: true
