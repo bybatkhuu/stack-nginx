@@ -16,7 +16,6 @@ services:
       - "./volumes/secrets/certbot/ssl:/etc/letsencrypt"
       - "./volumes/storage/nginx/www/.well-known/acme-challenge:/var/www/.well-known/acme-challenge"
     network_mode: host
-    command: ["--server=production", "--dns=cloudflare"]
     tty: true
 
   nginx:

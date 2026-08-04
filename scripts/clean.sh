@@ -54,6 +54,9 @@ while [ $# -gt 0 ]; do
 		-d | --data)
 			_IS_DATA=true
 			shift;;
+ 		-c | --certs)
+ 			_IS_CERTS=true
+ 			shift;;
 		-b | --backups)
 			_IS_BACKUPS=true
 			shift;;
