@@ -1,8 +1,7 @@
 # services:
 #   certbot:
 #     volumes:
-#       - "./volumes/secrets/certbot:/root/.secrets/certbot"
-#       - "./volumes/secrets/certbot:/root/.aws"
+#       - "./volumes/secrets/certbot/credentials/.aws:/root/.aws"
 #       - "./volumes/storage/certbot/logs:/var/log/letsencrypt"
 #     deploy:
 #       replicas: 0

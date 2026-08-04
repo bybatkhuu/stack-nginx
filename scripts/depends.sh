@@ -1,50 +1,46 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 
 ## --- Base --- ##
-# Getting path of this script file:
-_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+_SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-"$0"}")" >/dev/null 2>&1 && pwd -P)"
 _PROJECT_DIR="$(cd "${_SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
 
 
-# Loading .env file (if exists):
-if [ -f ".env" ]; then
-	# shellcheck disable=SC1091
-	source .env
-fi
+# shellcheck disable=SC1091
+[ -f .env ] && . .env
 
 
-if [ -z "$(which git)" ]; then
-	echo "[ERROR]: 'git' not found or not installed!"
+if ! command -v git >/dev/null 2>&1; then
+	echo "[ERROR]: Not found 'git' command, please install it first!" >&2
 	exit 1
 fi
 
-if [ -z "$(which gh)" ]; then
-	echo "[ERROR]: 'gh' not found or not installed!"
+if ! command -v gh >/dev/null 2>&1; then
+	echo "[ERROR]: Not found 'gh' command, please install it first!" >&2
 	exit 1
 fi
 
 if ! gh auth status >/dev/null 2>&1; then
-	echo "[ERROR]: You need to login: 'gh auth login'!"
+	echo "[ERROR]: You need to login: 'gh auth login'!" >&2
 	exit 1
 fi
 
 if ! command -v jq >/dev/null 2>&1; then
-	echo "[ERROR]: 'jq' not found or not installed!"
+	echo "[ERROR]: Not found 'jq' command, please install it first!" >&2
 	exit 1
 fi
 
 if ! command -v yq >/dev/null 2>&1; then
-	echo "[ERROR]: 'yq' not found or not installed!"
+	echo "[ERROR]: Not found 'yq' command, please install it first!" >&2
 	exit 1
 fi
 ## --- Base --- ##
 
 
 ## --- Variables --- ##
-# Load from envrionment variables:
+# Load from environment variables:
 COMPOSE_FILE_PATH="${COMPOSE_FILE_PATH:-compose.yml}"
 REPO_OWNER="${REPO_OWNER:-bybatkhuu}"
 REGISTRY_NAME="${REGISTRY_NAME:-${REPO_OWNER}}"
@@ -70,35 +66,53 @@ _CREATE_PR=false
 ## --- Variables --- ##
 
 
+## --- Menu arguments --- ##
+_usage_help() {
+	cat <<EOF
+USAGE: ${0} [options]
+
+OPTIONS:
+    -b, --branch          Enable create new branch step. Default: false
+    -c, --commit          Enable commit step. Default: false
+    -p, --push            Enable push step. Default: false
+    -r, --pull-request    Enable create pull request step. Default: false
+    -h, --help            Show this help message.
+
+EXAMPLES:
+    ${0} -b -c -p -r
+    ${0} --branch --commit
+EOF
+}
+
+while [ $# -gt 0 ]; do
+	case "${1}" in
+		-b | --branch)
+			_CREATE_BRANCH=true
+			shift;;
+		-c | --commit)
+			_IS_COMMIT=true
+			shift;;
+		-p | --push)
+			_IS_PUSH=true
+			shift;;
+		-r | --pull-request)
+			_CREATE_PR=true
+			shift;;
+		-h | --help)
+			_usage_help
+			exit 0;;
+		*)
+			echo "[ERROR]: Failed to parse argument -> ${1}!" >&2
+			_usage_help
+			exit 1;;
+	esac
+done
+## --- Menu arguments --- ##
+
+
 ## --- Main --- ##
 main()
 {
-	## --- Menu arguments --- ##
-	if [ -n "${1:-}" ]; then
-		local _input
-		for _input in "${@:-}"; do
-			case ${_input} in
-				-b | --branch)
-					_CREATE_BRANCH=true
-					shift;;
-				-c | --commit)
-					_IS_COMMIT=true
-					shift;;
-				-p | --push)
-					_IS_PUSH=true
-					shift;;
-				-r | --pull-request)
-					_CREATE_PR=true
-					shift;;
-				*)
-					echo "[ERROR]: Failed to parse input -> ${_input}!"
-					echo "[INFO]: USAGE: ${0}  -b, --branch | -c, --commit | -p, --push | -r, --pull-request"
-					exit 1;;
-			esac
-		done
-	fi
-	## --- Menu arguments --- ##
-
 	echo "[INFO]: Checking and syncing for new versions of dependencies/submodules..."
 	local _has_new_versions=false
 	while read -r _submodule; do
@@ -110,7 +124,7 @@ main()
 		local _submodule_version
 		_submodule_version="$(gh release view --json tagName --repo "${_submodule_repo}" | jq -r ".tagName" | tr -d 'v')" || exit 2
 		if [ -z "${_submodule_version}" ] || [ "${_submodule_version}" == "null" ]; then
-			echo "[ERROR]: Not found any release version from submodule: '${_submodule_repo}'!"
+			echo "[ERROR]: Not found any release version from submodule: '${_submodule_repo}'!" >&2
 			exit 1
 		fi
 
@@ -174,7 +188,7 @@ main()
 						-B dev || exit 2
 					echo "[OK]: Done."
 				else
-					echo "[WARN]: You cannot create a pull request without a new branch!"
+					echo "[WARN]: You cannot create a pull request without a new branch!" >&2
 					exit 1
 				fi
 			fi
@@ -184,5 +198,5 @@ main()
 	echo "[OK]: All done."
 }
 
-main "${@:-}"
+main
 ## --- Main --- ##

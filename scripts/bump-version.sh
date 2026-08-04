@@ -1,24 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 
 ## --- Base --- ##
-# Getting path of this script file:
-_SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+_SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]:-"$0"}")" >/dev/null 2>&1 && pwd -P)"
 _PROJECT_DIR="$(cd "${_SCRIPT_DIR}/.." >/dev/null 2>&1 && pwd)"
 cd "${_PROJECT_DIR}" || exit 2
 
 
-# Loading .env file (if exists):
-if [ -f ".env" ]; then
-	# shellcheck disable=SC1091
-	source .env
+# shellcheck disable=SC1091
+[ -f .env ] && . .env
+
+
+if [ ! -f ./scripts/get-version.sh ]; then
+	echo "[ERROR]: 'get-version.sh' script not found!" >&2
+	exit 1
 fi
 ## --- Base --- ##
 
 
 ## --- Variables --- ##
-# Load from envrionment variables:
+# Load from environment variables:
 VERSION_FILE_PATH="${VERSION_FILE_PATH:-VERSION.txt}"
 
 
@@ -31,54 +33,75 @@ _IS_PUSH=false
 ## --- Variables --- ##
 
 
+## --- Menu arguments --- ##
+_usage_help() {
+	cat <<EOF
+USAGE: ${0} [options]
+
+OPTIONS:
+    -b, --bump-type [TYPE]    Specify version bump type. [major | minor | patch]
+    -c, --commit              Create a commit for the bumped version. Default: false
+    -t, --tag                 Create a git tag for the bumped version. Default: false
+    -p, --push                Push commits and tags to the remote. Default: false
+    -h, --help                Show this help message.
+
+EXAMPLES:
+    ${0} -b patch -c -t -p
+    ${0} --bump-type=minor
+EOF
+}
+
+while [ $# -gt 0 ]; do
+	case "${1}" in
+		-b | --bump-type)
+			[ $# -ge 2 ] || { echo "[ERROR]: ${1} requires a value!" >&2; exit 1; }
+			_BUMP_TYPE="${2}"
+			shift 2;;
+		-b=* | --bump-type=*)
+			_BUMP_TYPE="${1#*=}"
+			shift;;
+		-c | --commit)
+			_IS_COMMIT=true
+			shift;;
+		-t | --tag)
+			_IS_TAG=true
+			shift;;
+		-p | --push)
+			_IS_PUSH=true
+			shift;;
+		-h | --help)
+			_usage_help
+			exit 0;;
+		*)
+			echo "[ERROR]: Failed to parse argument -> ${1}!" >&2
+			_usage_help
+			exit 1;;
+	esac
+done
+## --- Menu arguments --- ##
+
+
+if [ -z "${_BUMP_TYPE:-}" ]; then
+	echo "[ERROR]: Bump type is empty, use '-b=' or '--bump-type=' argument!" >&2
+	exit 1
+fi
+
+if [ "${_BUMP_TYPE}" != "major" ] && [ "${_BUMP_TYPE}" != "minor" ] && [ "${_BUMP_TYPE}" != "patch" ]; then
+	echo "[ERROR]: Bump type '${_BUMP_TYPE}' is invalid, should be: 'major', 'minor' or 'patch'!" >&2
+	exit 1
+fi
+
+if [ "${_IS_COMMIT}" == true ]; then
+	if ! command -v git >/dev/null 2>&1; then
+		echo "[ERROR]: Not found 'git' command, please install it first!" >&2
+		exit 1
+	fi
+fi
+
+
 ## --- Main --- ##
 main()
 {
-	## --- Menu arguments --- ##
-	if [ -n "${1:-}" ]; then
-		local _input
-		for _input in "${@:-}"; do
-			case ${_input} in
-				-b=* | --bump-type=*)
-					_BUMP_TYPE="${_input#*=}"
-					shift;;
-				-c | --commit)
-					_IS_COMMIT=true
-					shift;;
-				-t | --tag)
-					_IS_TAG=true
-					shift;;
-				-p | --push)
-					_IS_PUSH=true
-					shift;;
-				*)
-					echo "[ERROR]: Failed to parse input -> ${_input}!"
-					echo "[INFO]: USAGE: ${0}  -b=*, --bump-type=* [major | minor | patch] | -c, --commit | -t, --tag | -p, --push"
-					exit 1;;
-			esac
-		done
-	fi
-	## --- Menu arguments --- ##
-
-
-	if [ -z "${_BUMP_TYPE:-}" ]; then
-		echo "[ERROR]: Bump type is empty, use '-b=' or '--bump-type=' argument!"
-		exit 1
-	fi
-
-	if [ "${_BUMP_TYPE}" != "major" ] && [ "${_BUMP_TYPE}" != "minor" ] && [ "${_BUMP_TYPE}" != "patch" ]; then
-		echo "[ERROR]: Bump type '${_BUMP_TYPE}' is invalid, should be: 'major', 'minor' or 'patch'!"
-		exit 1
-	fi
-
-	if [ "${_IS_COMMIT}" == true ]; then
-		if [ -z "$(which git)" ]; then
-			echo "[ERROR]: 'git' not found or not installed!"
-			exit 1
-		fi
-	fi
-
-
 	echo "[INFO]: Checking current version..."
 	local _current_version
 	_current_version="$(./scripts/get-version.sh)"
@@ -115,7 +138,7 @@ main()
 		if [ "${_IS_TAG}" == true ]; then
 			echo "[INFO]: Tagging 'v${_new_version}'..."
 			if git rev-parse "v${_new_version}" > /dev/null 2>&1; then
-				echo "[ERROR]: 'v${_new_version}' tag is already exists!"
+				echo "[ERROR]: 'v${_new_version}' tag is already exists!" >&2
 				exit 1
 			fi
 			git tag "v${_new_version}" || exit 2
@@ -135,5 +158,5 @@ main()
 	fi
 }
 
-main "${@:-}"
+main
 ## --- Main --- ##

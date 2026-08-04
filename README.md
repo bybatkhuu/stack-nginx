@@ -123,10 +123,10 @@ git clone --recursive git@github.com:bybatkhuu/stack-nginx.git && \
 
 ```sh
 # Copy .env.example file into .env file:
-cp -v .env.example .env
+cp -v ./.env.example ./.env
 
 # Edit environment variables to fit in your environment:
-nano .env
+nano ./.env
 ```
 
 #### 3.2. 🎺 Configure **`compose.override.yml`** file
@@ -160,7 +160,20 @@ nano ./compose.override.yml
 docker compose config
 ```
 
-### 4. 🔧 Configure NGINX
+### 4. 🤖 Configure Certbot
+
+For **DNS challenges** you need to configure **API token/credentials** for your DNS provider:
+
+```sh
+# For example, for Cloudflare DNS provider:
+# Copy template config file into credentials directory:
+cp -v ./templates/certbot/cloudflare.ini ./volumes/secrets/certbot/credentials/cloudflare.ini
+
+# Edit the credential file to add DNS provider API token:
+nano ./volumes/secrets/certbot/credentials/cloudflare.ini
+```
+
+### 5. 🔧 Configure NGINX
 
 [TIP] Skip this step, if you've already configured NGINX.
 
@@ -188,7 +201,7 @@ nano ./volumes/storage/nginx/configs/site-enabled/[CUSTOM_BASENAME].conf
 nano ./volumes/storage/nginx/configs/site-enabled/100.example.com.conf
 ```
 
-### 5. 🚀 Start docker compose
+### 6. 🚀 Start docker compose
 
 **[CAUTION]**:
 
@@ -199,10 +212,10 @@ nano ./volumes/storage/nginx/configs/site-enabled/100.example.com.conf
 ./compose.sh start -l
 # Or:
 docker compose up -d --remove-orphans --force-recreate && \
-    docker compose logs -f --tail 100
+    docker compose logs -f -n 100
 ```
 
-### 6. 📡 Check services are running and monitor logs
+### 7. 📡 Check services are running and monitor logs
 
 📋 Check all services are running:
 
@@ -217,7 +230,7 @@ docker compose ps
 ```sh
 ./compose.sh logs
 # Or:
-docker compose logs -f --tail 100
+docker compose logs -f -n 100
 ```
 
 🧵 List all running processes inside containers:
@@ -243,12 +256,12 @@ docker compose stats
 # Or check certificates in container:
 docker compose exec certbot certbot certificates
 # Or check certificates in host:
-ls -alhF ./volumes/storage/nginx/ssl
+ls -alhF ./volumes/secrets/certbot/ssl
 # Or check certificates in host with tree:
-tree ./volumes/storage/nginx/ssl
+tree ./volumes/secrets/certbot/ssl
 ```
 
-### 7. 🪂 Stop docker compose
+### 8. 🪂 Stop docker compose
 
 ```sh
 ./compose.sh stop
@@ -273,7 +286,7 @@ You can use the following environment variables to configure:
 
 ## --- CERTBOT configs --- ##
 CERTBOT_EMAIL=user@email.com
-CERTBOT_DOMAINS="example.com,www.example.com"
+CERTBOT_DOMAINS="example.com,*.example.com"
 CERTBOT_DNS_TIMEOUT=30
 
 
