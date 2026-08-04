@@ -1,10 +1,21 @@
 ---
-title: Release Notes
+title: "Release Notes"
 hide:
   - navigation
 ---
 
 # 📌 Release Notes
+
+## v4.3.3-260804 (2026-08-04)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.3.3-260804 -->
+
+## What's Changed
+### 🔨 Scripts
+* Enhance Docker Compose setup and scripts for functionality and versioning by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/51
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.3.2-260802...v4.3.3-260804
 
 ## v4.3.2-260802 (2026-08-02)
 
