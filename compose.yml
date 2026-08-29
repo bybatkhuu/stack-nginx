@@ -1,16 +1,13 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.1.4-260804
+    image: bybatkhuu/certbot:3.1.5-260829
     restart: always
     environment:
       TERM: ${TERM:-xterm}
       TZ: ${TZ:-UTC}
-      CERTBOT_EMAIL: ${CERTBOT_EMAIL}
-      CERTBOT_DOMAINS: ${CERTBOT_DOMAINS}
+      CERTBOT_EMAIL: ${CERTBOT_EMAIL:?}
+      CERTBOT_DOMAINS: "${CERTBOT_DOMAINS:?}"
       CERTBOT_DNS_TIMEOUT: ${CERTBOT_DNS_TIMEOUT:-30}
-    env_file:
-      - path: .env
-        required: false
     volumes:
       - "./volumes/secrets/certbot/credentials:/root/.secrets/certbot"
       - "./volumes/secrets/certbot/ssl:/etc/letsencrypt"
@@ -19,16 +16,15 @@ services:
     tty: true
 
   nginx:
-    image: bybatkhuu/nginx:3.3.2-260804
+    image: bybatkhuu/nginx:3.3.3-260829
     depends_on:
       - certbot
     restart: always
     environment:
       TERM: ${TERM:-xterm}
       TZ: ${TZ:-UTC}
-    env_file:
-      - path: .env
-        required: false
+      NGINX_BASIC_AUTH_USER: ${NGINX_BASIC_AUTH_USER:?}
+      NGINX_BASIC_AUTH_PASS: "${NGINX_BASIC_AUTH_PASS:?}"
     volumes:
       - "./volumes/secrets/certbot/ssl:/etc/nginx/ssl"
       - "./volumes/configs/nginx/templates:/etc/nginx/templates"
