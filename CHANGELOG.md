@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.3.4-260829 (2026-08-29)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.3.4-260829 -->
+
+## What's Changed
+### 🐛 Fixes
+* Update Certbot and Nginx images, improve env variable handling by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/52
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.3.3-260804...v4.3.4-260829
+
 ## v4.3.3-260804 (2026-08-04)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.3.3-260804 -->
