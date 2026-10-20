@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.1.5-260829
+    image: bybatkhuu/certbot:3.1.6-261020
     restart: always
     environment:
       TERM: ${TERM:-xterm}
@@ -14,9 +14,8 @@ services:
       - "./volumes/storage/nginx/www/.well-known/acme-challenge:/var/www/.well-known/acme-challenge"
     network_mode: host
     tty: true
-
   nginx:
-    image: bybatkhuu/nginx:3.3.3-260829
+    image: bybatkhuu/nginx:3.4.0-261020
     depends_on:
       - certbot
     restart: always

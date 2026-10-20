@@ -34,7 +34,7 @@ This is a docker-compose stack for NGINX with Certbot (Let's Encrypt).
 - Rate limiting
 - HTTP cache
 - HTTP header transformations
-- HTTP/2 and HTTPS
+- HTTPS, HTTP/2 and HTTP/3
 - Basic authentication
 - Websockets
 - Docker and docker-compose
@@ -217,36 +217,11 @@ docker compose up -d --remove-orphans --force-recreate && \
 
 ### 7. 📡 Check services are running and monitor logs
 
-📋 Check all services are running:
-
 ```sh
-./compose.sh list
-# Or:
-docker compose ps
-```
-
-📟 Monitor all logs of containers:
-
-```sh
-./compose.sh logs
-# Or:
-docker compose logs -f -n 100
-```
-
-🧵 List all running processes inside containers:
-
-```sh
-./compose.sh ps
-# Or:
-docker compose top
-```
-
-📊 Check resource usage of containers:
-
-```sh
-./compose.sh stats
-# Or:
-docker compose stats
+./compose.sh list    # or: docker compose ps
+./compose.sh logs    # or: docker compose logs -f -n 100
+./compose.sh ps      # or: docker compose top
+./compose.sh stats   # or: docker compose stats
 ```
 
 🔐 Check certificates:
@@ -287,12 +262,12 @@ You can use the following environment variables to configure:
 ## --- CERTBOT configs --- ##
 CERTBOT_EMAIL=user@email.com
 CERTBOT_DOMAINS="example.com,*.example.com"
-CERTBOT_DNS_TIMEOUT=30
+# CERTBOT_DNS_TIMEOUT=30
 
 
 ## --- NGINX configs --- ##
 NGINX_BASIC_AUTH_USER=nginx_admin
-NGINX_BASIC_AUTH_PASS="NGINX_ADMIN_PASSWORD123" # !!! CHANGE THIS TO RANDOM PASSWORD !!!
+NGINX_BASIC_AUTH_PASS=""
 
 
 ## -- Docker configs -- ##

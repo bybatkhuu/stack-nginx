@@ -22,7 +22,9 @@ upstream ${API_UPSTREAM_NAME} {
 
 ## HTTPS:
 server {
+	listen ${NGINX_HTTPS_PORT} quic;
 	listen ${NGINX_HTTPS_PORT} ssl;
+	listen [::]:${NGINX_HTTPS_PORT} quic;
 	listen [::]:${NGINX_HTTPS_PORT} ssl;
 	http2 on;
 
@@ -48,6 +50,9 @@ server {
 	## Additional configs:
 	include /etc/nginx/conf.d/general.conf;
 	include /etc/nginx/conf.d/well-known.conf;
+
+	add_header Alt-Svc 'h3=":443"; ma=86400' always;
+	add_header QUIC-Status ${DOLLAR}http3;
 
 	## Static files:
 	root /var/www/web/public;

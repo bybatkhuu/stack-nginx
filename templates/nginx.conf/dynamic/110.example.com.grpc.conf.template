@@ -13,7 +13,9 @@ upstream ${GRPC_UPSTREAM_NAME} {
 
 ## Subdomain as reverse proxy:
 server {
+	listen ${NGINX_GRPC_PORT} quic;
 	listen ${NGINX_GRPC_PORT} ssl;
+	listen [::]:${NGINX_GRPC_PORT} quic;
 	listen [::]:${NGINX_GRPC_PORT} ssl;
 	http2 on;
 	server_name ${GRPC_DOMAIN};
@@ -36,6 +38,9 @@ server {
 	## Proxy headers:
 	# include /etc/nginx/conf.d/proxy.conf;
 	# include /etc/nginx/conf.d/proxy-timeout.conf;
+
+	add_header Alt-Svc 'h3=":443"; ma=86400' always;
+	add_header QUIC-Status ${DOLLAR}http3;
 
 	## Reverse proxy:
 	location / {
