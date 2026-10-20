@@ -13,7 +13,9 @@ server {
 
 ## Main domain as static files (HTTPS):
 server {
+	listen ${NGINX_HTTPS_PORT} quic;
 	listen ${NGINX_HTTPS_PORT} ssl;
+	listen [::]:${NGINX_HTTPS_PORT} quic;
 	listen [::]:${NGINX_HTTPS_PORT} ssl;
 	http2 on;
 	server_name ${DOMAIN} www.${DOMAIN};
@@ -43,6 +45,9 @@ server {
 	## Additional configs:
 	include /etc/nginx/conf.d/general.conf;
 	include /etc/nginx/conf.d/well-known.conf;
+
+	add_header Alt-Svc 'h3=":443"; ma=86400' always;
+	add_header QUIC-Status ${DOLLAR}http3;
 
 	## Static files:
 	root /var/www/${DOMAIN}/public;
@@ -82,7 +87,9 @@ upstream ${API_UPSTREAM_NAME} {
 
 ## Subdomain as reverse proxy (HTTPS):
 server {
+	listen ${NGINX_HTTPS_PORT} quic;
 	listen ${NGINX_HTTPS_PORT} ssl;
+	listen [::]:${NGINX_HTTPS_PORT} quic;
 	listen [::]:${NGINX_HTTPS_PORT} ssl;
 	http2 on;
 	server_name ${API_DOMAIN};
@@ -115,6 +122,9 @@ server {
 	include /etc/nginx/conf.d/proxy.conf;
 	# include /etc/nginx/conf.d/proxy-timeout.conf;
 	include /etc/nginx/conf.d/api-headers.conf;
+
+	add_header Alt-Svc 'h3=":443"; ma=86400' always;
+	add_header QUIC-Status ${DOLLAR}http3;
 
 	## Reverse proxy:
 	location / {
