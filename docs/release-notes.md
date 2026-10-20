@@ -6,6 +6,17 @@ hide:
 
 # 📌 Release Notes
 
+## v4.4.0-261020 (2026-10-20)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.4.0-261020 -->
+
+## What's Changed
+### ✨ Features
+* Updated NGINX configs to support HTTP3 QUIC and other improvements by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/53
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.3.4-260829...v4.4.0-261020
+
 ## v4.3.4-260829 (2026-08-29)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.3.4-260829 -->
