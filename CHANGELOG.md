@@ -1,5 +1,16 @@
 # Changelog
 
+## v4.5.0-261021 (2026-10-21)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.5.0-261021 -->
+
+## What's Changed
+### ✨ Features
+* feat: update certbot and nginx images; enhance backup script with war… by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/54
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.4.0-261020...v4.5.0-261021
+
 ## v4.4.0-261020 (2026-10-20)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.4.0-261020 -->
