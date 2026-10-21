@@ -47,8 +47,16 @@ main()
 	local _backup_file_path
 	_backup_file_path="${BACKUPS_DIR}/${PROJECT_SLUG}.v${_current_version}.$(date -u '+%y%m%d_%H%M%S').tar.gz"
 	echo "[INFO]: Creating backup file: '${_backup_file_path}'..."
-	tar -czpvf "${_backup_file_path}" -C ./volumes ./storage ./configs ./secrets || {
-		sudo tar -czpvf "${_backup_file_path}" -C ./volumes ./storage ./configs ./secrets || exit 2
+	tar -czphvf "${_backup_file_path}" \
+		--warning=no-file-changed \
+		-C ./volumes \
+		./storage \
+		./secrets || {
+		sudo tar -czphvf "${_backup_file_path}" \
+			--warning=no-file-changed \
+			-C ./volumes \
+			./storage \
+			./secrets || exit 2
 	}
 	echo "[OK]: Done."
 }

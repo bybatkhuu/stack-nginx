@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.1.6-261020
+    image: bybatkhuu/certbot:3.2.0-261021
     restart: always
     environment:
       TERM: ${TERM:-xterm}
@@ -15,7 +15,7 @@ services:
     network_mode: host
     tty: true
   nginx:
-    image: bybatkhuu/nginx:3.4.0-261020
+    image: bybatkhuu/nginx:3.5.0-261021
     depends_on:
       - certbot
     restart: always
