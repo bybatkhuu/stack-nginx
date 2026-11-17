@@ -15,7 +15,7 @@ services:
     network_mode: host
     tty: true
   nginx:
-    image: bybatkhuu/nginx:3.5.0-261021
+    image: bybatkhuu/nginx:3.6.0-261108
     depends_on:
       - certbot
     restart: always
