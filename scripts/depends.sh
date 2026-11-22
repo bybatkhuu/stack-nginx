@@ -55,6 +55,11 @@ SUBMODULE_LIST="
 		\"submodule_repo\": \"${REPO_OWNER}/server-nginx-template\",
 		\"image_name\": \"${REGISTRY_NAME}/nginx\",
 		\"service_name\": \"nginx\"
+	},
+	{
+		\"submodule_repo\": \"${REPO_OWNER}/sidecar-cron\",
+		\"image_name\": \"${REGISTRY_NAME}/cron\",
+		\"service_name\": \"cron\"
 	}
 ]"
 

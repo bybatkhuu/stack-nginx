@@ -33,3 +33,27 @@ services:
     network_mode: host
     command: ["--https=lets"]
     tty: true
+  cron:
+    image: humblebeeai/cron:2.0.0-261024
+    restart: always
+    environment:
+      TERM: ${TERM:-xterm}
+      TZ: ${TZ:-Asia/Seoul}
+    volumes:
+      # - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./volumes/configs/cron/scripts:/app/cron/scripts/custom"
+      - "./volumes/configs/cron/cron.d:/app/cron/configs/cron.d"
+      - "./volumes/configs/cron/periodic:/app/cron/scripts/periodic"
+      - "./volumes/storage/cron/logs:/var/log/cron"
+      - "./volumes/secrets:/var/lib/secrets"
+      - "./volumes/storage:/var/lib/storage"
+      - "./volumes/backups:/var/lib/backups"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 256M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    tty: true
