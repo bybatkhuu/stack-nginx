@@ -6,6 +6,20 @@ hide:
 
 # 📌 Release Notes
 
+## v4.6.0-261122 (2026-11-22)
+
+<!-- Release notes generated using configuration in .github/release.yml at v4.6.0-261122 -->
+
+## What's Changed
+### ✨ Features
+* chore(deps): bump https://github.com/igorshubovych/markdownlint-cli from v0.49.1 to 0.50.0 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/55
+* Add sidecar-cron service and update dependencies by @bybatkhuu in https://github.com/bybatkhuu/stack-nginx/pull/57
+### 📦 Dependencies
+* chore(deps): bump bybatkhuu/nginx from 3.5.0-261021 to 3.6.0-261108 by @dependabot[bot] in https://github.com/bybatkhuu/stack-nginx/pull/56
+
+
+**Full Changelog**: https://github.com/bybatkhuu/stack-nginx/compare/v4.5.0-261021...v4.6.0-261122
+
 ## v4.5.0-261021 (2026-10-21)
 
 <!-- Release notes generated using configuration in .github/release.yml at v4.5.0-261021 -->
