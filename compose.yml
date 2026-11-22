@@ -1,6 +1,6 @@
 services:
   certbot:
-    image: bybatkhuu/certbot:3.2.0-261021
+    image: bybatkhuu/certbot:3.2.1-261121
     restart: always
     environment:
       TERM: ${TERM:-xterm}
@@ -34,7 +34,7 @@ services:
     command: ["--https=lets"]
     tty: true
   cron:
-    image: humblebeeai/cron:2.0.0-261024
+    image: bybatkhuu/cron:1.0.1-261121
     restart: always
     environment:
       TERM: ${TERM:-xterm}
